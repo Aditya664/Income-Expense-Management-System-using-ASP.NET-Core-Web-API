@@ -8,5 +8,6 @@ namespace INCOMEEXPENSE.Web.Contexts
         public RepositoryContext(DbContextOptions options) : base(options) { }
         public DbSet<Register> Users { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Account> Accounts { get; set; }
     }
 }

@@ -8,6 +8,7 @@ namespace INCOMEEXPENSE.Web.Repositories
         private RepositoryContext _repoContext;
         private IUserRepository _user;
         private ICategoryRepository _category;
+        private IAccountRepository _account;
 
         public IUserRepository User
         {
@@ -18,6 +19,18 @@ namespace INCOMEEXPENSE.Web.Repositories
                     _user = new UserRepository(_repoContext);
                 }
                 return _user;
+            }
+        }
+
+        public IAccountRepository Account
+        {
+            get
+            {
+                if (_account == null)
+                {
+                    _account = new AccountRepository(_repoContext);
+                }
+                return _account;
             }
         }
 
