@@ -17,8 +17,7 @@ namespace INCOMEEXPENSE.Web.Controllers
         {
             _repository = repository;
         }
-
-        [HttpGet("{userId}")]
+        [HttpGet("GetAllCategory/{userId}")]
         public IActionResult Get(Guid userId)
         {
             var categories = _repository.Category.FindByCondition(categories => categories.CreatedBy == userId).ToList();
@@ -29,7 +28,7 @@ namespace INCOMEEXPENSE.Web.Controllers
             return StatusCode(500, categories);
         }
 
-        [HttpGet("expense/{userId}")]
+        [HttpGet("GetExpenseCategory/expense/{userId}")]
         public IActionResult GetExpenseCategories(Guid userId)
         {
             var categories = _repository.Category.FindByCondition(c => c.Type == "expense" && c.CreatedBy == userId).ToList();
@@ -44,7 +43,7 @@ namespace INCOMEEXPENSE.Web.Controllers
             return Ok(categoryList);
         }
 
-        [HttpGet("income/{userId}")]
+        [HttpGet("GetIncomeCategory/income/{userId}")]
         public IActionResult GetIncomeCategories(Guid userId)
         {
             var categories = _repository.Category.FindByCondition(c => c.Type == "income" && c.CreatedBy == userId).ToList();
@@ -60,7 +59,7 @@ namespace INCOMEEXPENSE.Web.Controllers
         }
 
 
-        [HttpPost("{userId}")]
+        [HttpPost("CreateNewCategory/{userId}")]
         public IActionResult PostCategory(Guid userId, [FromBody] CategoryRequestDto category)
         {
             var isExistingCategory = _repository.Category.FindByCondition(x => x.Name == category.Name && x.CreatedBy == userId && x.Type == category.Type).FirstOrDefault();
@@ -82,10 +81,10 @@ namespace INCOMEEXPENSE.Web.Controllers
             return CreatedAtAction("GetCategory", new { userId = userId, id = newCategory.Id }, category);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteCategoryById( Guid id)
+        [HttpGet("DeleteCategory/{userId}/{id}")]
+        public IActionResult DeleteCategoryById(Guid userId, Guid id)
         {
-            var category = _repository.Category.FindByCondition(x => x.Id == id).FirstOrDefault(); // Fetch user by ID from repository
+            var category = _repository.Category.FindByCondition(x => x.Id == id && x.CreatedBy == userId).FirstOrDefault(); // Fetch user by ID from repository
 
             if (category == null)
             {
@@ -97,7 +96,7 @@ namespace INCOMEEXPENSE.Web.Controllers
             return Ok(category); // Return 200 OK with user data if found
         }
 
-        [HttpGet("{userId}/{id}")]
+        [HttpGet("GetCategory/{userId}/{id}")]
         public IActionResult GetCategory(Guid userId, Guid id)
         {
             var category = _repository.Category.FindByCondition(c => c.Id == id && c.CreatedBy == userId).FirstOrDefault();

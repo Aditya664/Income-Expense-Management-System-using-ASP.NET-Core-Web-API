@@ -15,17 +15,17 @@ namespace INCOMEEXPENSE.Web.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllUsers")]
         public IActionResult Get()
         {
             var owners = _repository.User.FindAll();
             return StatusCode(500, owners);
         }
 
-        [HttpGet("{Id}", Name = "GetUserById")] // Define route with id parameter
-        public IActionResult GetById(Guid Id)
+        [HttpGet("GetUserById/{userId}", Name = "GetUserById")] // Define route with id parameter
+        public IActionResult GetById(Guid userId)
         {
-            var user = _repository.User.FindByCondition(x => x.Id == Id).FirstOrDefault(); // Fetch user by ID from repository
+            var user = _repository.User.FindByCondition(x => x.Id == userId).FirstOrDefault(); // Fetch user by ID from repository
 
             if (user == null)
             {
@@ -35,10 +35,10 @@ namespace INCOMEEXPENSE.Web.Controllers
             return Ok(user); // Return 200 OK with user data if found
         }
 
-        [HttpDelete("{Id}")] // Define route with id parameter
-        public IActionResult DeleteUserById(Guid Id)
+        [HttpDelete("DeleteUserById/{userId}")] // Define route with id parameter
+        public IActionResult DeleteUserById(Guid userId)
         {
-            var user = _repository.User.FindByCondition(x => x.Id == Id).FirstOrDefault(); // Fetch user by ID from repository
+            var user = _repository.User.FindByCondition(x => x.Id == userId).FirstOrDefault(); // Fetch user by ID from repository
 
             if (user == null)
             {
@@ -51,7 +51,7 @@ namespace INCOMEEXPENSE.Web.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("CreateNewUser")]
         public IActionResult Create(RegisterRequestDto registerDto)
         {
             if (!ModelState.IsValid)
